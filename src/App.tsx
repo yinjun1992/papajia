@@ -563,25 +563,40 @@ function App() {
 
   return (
     <div className="app-root">
-      <div className="title-banner">宇宙爬爬架3D模拟器</div>
-      <div className="title-authors">
-        <div>程序开发：宇宙爸爸</div>
-        <div>产品经理：宇宙妈妈</div>
-        <div>实习生：小宇宙</div>
+      <div className="canvas-wrap" ref={mountRef} />
+
+      <div className="header-container">
+        <div className="title-banner">宇宙爬爬架3D模拟器</div>
+        <div className="title-authors">
+          <div>程序开发：宇宙爸爸</div>
+          <div>产品经理：宇宙妈妈</div>
+          <div>实习生：小宇宙</div>
+        </div>
       </div>
+
+      <div className="counts">
+        <div>20cm管 <span>{partsCounts.pipe20cm}</span></div>
+        <div>40cm管 <span>{partsCounts.pipe40cm}</span></div>
+        <div>二通连接件 <span>{partsCounts.connectors2}</span></div>
+        <div>三通连接件 <span>{partsCounts.connectors3}</span></div>
+        <div>四通连接件 <span>{partsCounts.connectors4}</span></div>
+      </div>
+
       <div className="toolbar">
         <button className={placing?.lengthUnits === 2 ? 'active' : ''} onClick={() => setPlacing({ lengthUnits: 2 })}>添加20cm管</button>
         <button className={placing?.lengthUnits === 4 ? 'active' : ''} onClick={() => setPlacing({ lengthUnits: 4 })}>添加40cm管</button>
         <span className="sep" />
-        <span>方向：</span>
-        <button onClick={cycleDirection} disabled={availableDirs.length === 0}>切换方向</button>
-        <span>{placingStartUnits ? `${currentDir.axis.toUpperCase()}${currentDir.sign === 1 ? '+' : '-'}` : '-'}</span>
-        <button onClick={confirmPlace} disabled={!(placing && placingStartUnits)}>确认放置</button>
+        <span className="hint">方向：</span>
+        <button onClick={cycleDirection} disabled={availableDirs.length === 0}>切换 (R)</button>
+        <span style={{ width: '40px', textAlign: 'center', fontWeight: 'bold', color: '#3b82f6' }}>
+          {placingStartUnits ? `${currentDir.axis.toUpperCase()}${currentDir.sign === 1 ? '+' : '-'}` : '-'}
+        </span>
+        <button onClick={confirmPlace} disabled={!(placing && placingStartUnits)} className={placing && placingStartUnits ? 'active' : ''}>确认放置</button>
         <span className="sep" />
         <button onClick={downloadSnapshot}>一键截图</button>
         <span className="sep" />
-        <button onClick={() => setShowGenModal(true)}>一键生成结构</button>
-        <span className="hint">按 Esc 取消，Delete 删除选中</span>
+        <button onClick={() => setShowGenModal(true)}>一键生成</button>
+        <span className="hint">Esc 取消 / Del 删除</span>
       </div>
 
       {showGenModal && (
@@ -590,31 +605,21 @@ function App() {
             <div className="modal-title">一键生成结构</div>
             <div className="modal-body">
               <div className="modal-row">
-                <label>20cm 管线根数：</label>
+                <label>20cm 管线根数</label>
                 <input type="number" min={0} value={genCount20} onChange={e => setGenCount20(Math.max(0, Number(e.target.value) || 0))} />
               </div>
               <div className="modal-row">
-                <label>40cm 管线根数：</label>
+                <label>40cm 管线根数</label>
                 <input type="number" min={0} value={genCount40} onChange={e => setGenCount40(Math.max(0, Number(e.target.value) || 0))} />
               </div>
               <div className="modal-actions">
-                <button onClick={() => { const s = buildStructureByCounts(genCount20, genCount40); setPipes(s); setPlacing(null); setPlacingStartUnits(null); setShowGenModal(false); }}>生成</button>
+                <button onClick={() => { const s = buildStructureByCounts(genCount20, genCount40); setPipes(s); setPlacing(null); setPlacingStartUnits(null); setShowGenModal(false); }}>开始生成</button>
                 <button onClick={() => setShowGenModal(false)}>取消</button>
               </div>
             </div>
           </div>
         </div>
       )}
-
-      <div className="counts">
-        <div>20cm管：{partsCounts.pipe20cm}</div>
-        <div>40cm管：{partsCounts.pipe40cm}</div>
-        <div>二通连接件：{partsCounts.connectors2}</div>
-        <div>三通连接件：{partsCounts.connectors3}</div>
-        <div>四通连接件：{partsCounts.connectors4}</div>
-      </div>
-
-      <div className="canvas-wrap" ref={mountRef} />
     </div>
   )
 }
