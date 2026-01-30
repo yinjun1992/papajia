@@ -44,5 +44,3 @@ npm run preview
 - **一键生成**：点击「一键生成结构」，输入手头拥有的管件数量，系统会自动生成推荐的结构。
 - **保存截图**：点击「一键截图」可以下载当前设计图及物料清单图片。
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
